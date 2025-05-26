@@ -20,7 +20,7 @@
             --primary-color: #007AFF; 
             --secondary-color: #555;
             --text-color-dark: #1d1d1f;
-            --text-color-dark-rgb: 29, 29, 31; /* Added for rgba backgrounds */
+            --text-color-dark-rgb: 29, 29, 31;
             --text-color-light: #f5f5f7;
             --glass-bg-light: rgba(255, 255, 255, 0.35); 
             --glass-border-light: rgba(255, 255, 255, 0.5);
@@ -29,11 +29,17 @@
             --glass-blur: 14px; 
             --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.12); 
             --border-radius-main: 22px; 
+            --tl-height: 64px; 
         }
 
         body {
             position: relative; 
+            background:linear-gradient(135deg,#e9eafa,#f0f4f8,#e2e8f0,#dee6ed); 
+            background-size:300% 300%; 
+            animation:gradientMainAnimation 25s ease infinite; 
         }
+
+        @keyframes gradientMainAnimation { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         .reveal {
             font-family: 'Inter', sans-serif;
@@ -41,7 +47,7 @@
         }
 
         .reveal .slides {
-            margin-top: var(--tl-height, 64px); 
+            margin-top: 0; 
         }
 
         .reveal ::selection {
@@ -50,19 +56,20 @@
             text-shadow: none;
         }
 
-        .reveal .slides section {
-            text-align: left;
-            padding: 40px; 
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: calc(100% - var(--tl-height, 64px)); 
+        /* ===== Alinhamento definitivo de todos os slides ===== */
+        .reveal .slides section{
+          height: 100vh;                     
+          padding: var(--tl-height) 40px 40px;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;           
+          align-items: center;               
+          background: transparent;           
         }
         
-        .reveal .slides section.center-content {
-            text-align: center;
-            align-items: center;
+        .reveal .slides section.center-content { 
+            text-align: center; 
         }
 
         .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
@@ -92,10 +99,12 @@
             border-left: 5px solid var(--primary-color);
             padding: 20px 25px; 
             font-style: italic;
-            margin: 25px 0;
+            margin: 25px 0; 
             background: rgba(0,0,0,0.03); 
             border-radius: calc(var(--border-radius-main) - 4px); 
             box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+            width: auto; 
+            max-width: 100%; 
         }
 
         .fixed-timeline-container {
@@ -109,6 +118,13 @@
             justify-content: center;
             padding: 0 20px;
             box-sizing: border-box;
+            height:var(--tl-height); 
+            backdrop-filter:blur(14px) saturate(140%);
+            -webkit-backdrop-filter:blur(14px) saturate(140%);
+            background:rgba(255,255,255,.55);
+            box-shadow:0 4px 14px rgba(0,0,0,.06);
+            border-bottom: none; 
+            overflow:visible; 
         }
 
         .timeline {
@@ -139,15 +155,6 @@
             100% { box-shadow: 0 0 8px var(--primary-color), 0 0 12px var(--primary-color); }
         }
 
-        .fixed-timeline-container{
-          --tl-height:64px;              
-          height:var(--tl-height);
-          backdrop-filter:blur(14px) saturate(140%);
-          -webkit-backdrop-filter:blur(14px) saturate(140%);
-          background:rgba(255,255,255,.55);
-          box-shadow:0 4px 14px rgba(0,0,0,.06);
-          border-bottom: none; 
-        }
         .timeline::before{
           content:''; 
           position:absolute; 
@@ -201,15 +208,16 @@
           filter:blur(6px);
           z-index:-1; 
         }
-        .timeline-item::after{
+        .timeline-item::after{ 
           content: attr(data-label); 
           position: absolute; 
-          left: 50%; 
+          top:calc(100% + 6px); 
+          left:50%;
+          transform:translateX(-50%); 
           font-family: 'Inter', sans-serif; 
           font-weight: 500; 
           font-size:.72em; 
           opacity:.6; 
-          transform:translate(-50%,8px) translateY(25px); 
           transition:opacity .3s ease; 
           white-space: nowrap; 
           color: #333; 
@@ -217,17 +225,15 @@
           border-radius: 4px; 
           background-color: rgba(255,255,255,0.1); 
         }
-        .timeline-item:hover::after,.timeline-item.active::after{
+        .timeline-item:hover::after,
+        .timeline-item.active::after{ 
             opacity:1;
             color: #000; 
         }
 
-        .bg-animated-gradient-main {
-            background: linear-gradient(135deg, #e9eafA, #f0f4f8, #e2e8f0, #dee6ed);
-            background-size: 300% 300%;
-            animation: gradientMainAnimation 25s ease infinite;
+        .bg-animated-gradient-main { 
+            background: inherit; 
         }
-        @keyframes gradientMainAnimation { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .bg-animated-gradient-main .glass-card { background: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.6);} 
         .bg-animated-gradient-main h1, .bg-animated-gradient-main h2, .bg-animated-gradient-main p, .bg-animated-gradient-main li { color: var(--text-color-dark); }
         .bg-animated-gradient-main strong { color: var(--primary-color); }
@@ -272,15 +278,27 @@
         .era-futuro .glass-card { background: rgba(26,37,51,0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(52, 231, 228, 0.25); }
         .era-futuro .masonry-item.glass-card { background: rgba(52, 231, 228, 0.1); border-color: rgba(52, 231, 228, 0.2); }
         .era-futuro .slide-footer { color: rgba(245, 245, 247, 0.5); }
-
-        .transition-slide {
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 20px; 
+        
+        .light-text { 
+            color: var(--text-color-light) !important; 
         }
+
+        .bg-dark-gradient {
+            background: linear-gradient(140deg, #3e4a5e 0%, #2c3542 100%); 
+        }
+        .bg-dark-gradient .transition-slide .text-container { 
+            background: rgba(0,0,0,0.25); 
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .bg-modern-5 {
+            background: linear-gradient(135deg, #f0f2f5, #e6e9ed, #dde1e6); 
+        }
+        .bg-modern-5 .transition-slide .text-container { 
+            background: rgba(var(--text-color-dark-rgb), 0.05); 
+            border: 1px solid rgba(var(--text-color-dark-rgb), 0.1);
+        }
+
         .transition-slide .text-container { 
             background: rgba(0,0,0,0.15); 
             padding: 30px 50px; 
@@ -288,14 +306,15 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.1); 
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            max-width: 80%;
+            max-width: 80%; 
+            text-align: center; 
+            width: auto; 
         }
         .era-primitiva .transition-slide .text-container { background: rgba(255,255,255,0.1); }
-        .era-feudal .transition-slide .text-container { background: rgba(0,0,0,0.25); }
+        .era-feudal .transition-slide .text-container { background: rgba(0,0,0,0.25); } 
         .era-industrial .transition-slide .text-container { background: rgba(255,255,255,0.15); }
-        .era-digital .transition-slide .text-container { background: rgba(0,0,0,0.2); }
-        .era-futuro .transition-slide .text-container { background: rgba(26,37,51,0.4); border: 1px solid rgba(52, 231, 228, 0.15); }
-        .bg-modern-5 .transition-slide .text-container { background: rgba(255,255,255,0.3); } 
+        .era-digital .transition-slide .text-container { background: rgba(0,0,0,0.2); }  
+        .era-futuro .transition-slide .text-container { background: rgba(26,37,51,0.4); border: 1px solid rgba(52, 231, 228, 0.15); } 
 
         .transition-slide h2 {
             font-size: 3.2em; 
@@ -305,13 +324,13 @@
         }
         .transition-slide p.subtitle {
             font-size: 1.1em;
-            color: rgba(255,255,255,0.75); 
+            color: rgba(255,255,255,0.75);  
             font-family: 'Inter', sans-serif;
             margin-top: 0;
         }
         .era-primitiva .transition-slide h2, .era-primitiva .transition-slide p.subtitle { color: #4a3b31; }
         .era-industrial .transition-slide h2, .era-industrial .transition-slide p.subtitle { color: #3d372e; }
-        .bg-modern-5 .transition-slide h2, .bg-modern-5 .transition-slide p.subtitle { color: var(--text-color-dark); }
+        .bg-modern-5 .transition-slide h2, .bg-modern-5 .transition-slide p.subtitle { color: var(--text-color-dark); } 
 
         .glass-card {
             background: var(--glass-bg-light);
@@ -321,32 +340,41 @@
             border: 1px solid var(--glass-border-light);
             padding: 35px; 
             box-shadow: var(--card-shadow);
-            margin-bottom: 25px;
+            margin-bottom: 25px; 
+            width: auto; 
+            max-width: 100%; 
         }
-        /* Estilos para cards compactos, usados no slide da Grande Depressão */
-        .glass-card.compact-card {
-            padding: 25px; /* Padding reduzido */
+        .text-container, 
+        .glass-card, 
+        .gsap-reveal-card, 
+        .compact-card { 
+            margin-left: auto; 
+            margin-right: auto; 
+        }
+
+        .glass-card.compact-card { 
+            padding: 25px;
         }
         .glass-card.compact-card h4 {
-            font-size: 1.15em; /* Fonte do título do card levemente menor */
+            font-size: 1.15em; 
             margin-bottom: 15px;
         }
         .glass-card.compact-card .icon-list li {
-            font-size: 0.9em; /* Fonte dos itens da lista menor */
-            margin-bottom: 8px; /* Espaçamento entre itens menor */
-            line-height: 1.5; /* Altura da linha ajustada */
+            font-size: 0.9em; 
+            margin-bottom: 8px; 
+            line-height: 1.5; 
         }
         .glass-card.compact-card .icon-list .fa-fw {
-            width: 1.3em; /* Largura do ícone ajustada */
-            font-size: 1.1em; /* Tamanho do ícone ajustado */
-            margin-right: 10px; /* Margem do ícone ajustada */
+            width: 1.3em; 
+            font-size: 1.1em; 
+            margin-right: 10px; 
         }
 
         .masonry-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
             gap: 25px;
-            width: 100%;
+            width: 100%; 
         }
         
         .intro-slide .timeline { 
@@ -365,56 +393,106 @@
         .icon-list .fa-fw { width: 1.5em; font-size: 1.3em; margin-right: 15px; text-align: center; color: var(--primary-color); }
         .era-primitiva .icon-list .fa-fw { color: #705a4b; }
         .era-feudal .icon-list .fa-fw { color: #a7b8c5; }
-        .era-industrial .icon-list .fa-fw { color: #c0392b; } /* This color will apply to the title icon */
+        .era-industrial .icon-list .fa-fw { color: #c0392b; }
         .era-digital .icon-list .fa-fw { color: #cceeff; }
         .era-futuro .icon-list .fa-fw { color: #34e7e4; }
+        
+        section[data-era="seculoXX"] .icon-list .fa-fw,
+        section[data-era="seculoXX"] h4 > .fa-fw { 
+            color: var(--secondary-color); 
+        }
+        section[data-era="seculoXX"] .icon-smoot-hawley { color: #c0392b; }
+        section[data-era="seculoXX"] .icon-retaliation { color: #e74c3c; }
+        section[data-era="seculoXX"] .icon-new-deal { color: var(--primary-color); } 
+        section[data-era="seculoXX"] .icon-coffee-crisis { color: #8D6E63; }
+        section[data-era="seculoXX"] .icon-price-drop { color: #E57373; }
+        section[data-era="seculoXX"] .icon-stock-burn { color: #FFB74D; }
+        section[data-era="seculoXX"] .icon-industrialization-stimulus { color: #757575; }
 
-        .columns-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
-        .full-width-image-container { width: 100%; height: 250px; overflow: hidden; border-radius: var(--border-radius-main); margin-bottom: 25px; }
+        section[data-era="seculoXX"] .icon-women-workforce { color: #e91e63; }
+        section[data-era="seculoXX"] .icon-war-production-industry { color: #607D8B; }
+        section[data-era="seculoXX"] .icon-war-production-tools { color: #795548; }
+        section[data-era="seculoXX"] .icon-war-production-vote { color: #9C27B0; }
+        section[data-era="seculoXX"] .icon-war-production-wrench { color: #FF9800; }
+
+        section[data-era="seculoXX"] .icon-war-effort-jet { color: #4CAF50; }
+        section[data-era="seculoXX"] .icon-war-effort-clock { color: #FFC107; }
+        section[data-era="seculoXX"] .icon-war-effort-users-cog { color: #3F51B5; }
+        section[data-era="seculoXX"] .icon-war-effort-ban { color: #f44336; }
+
+        section[data-era="seculoXX"] .icon-post-war-reconstruction { color: #FF5722; }
+        section[data-era="seculoXX"] .icon-post-war-tech { color: #8BC34A; }
+        section[data-era="seculoXX"] .icon-post-war-child-labor { color: #9E9E9E; }
+        section[data-era="seculoXX"] .icon-post-war-education { color: #673AB7; }
+        
+        section[data-era="posguerra"] .icon-list .tech-advances { color: #FF5722; }
+
+
+        .columns-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; width:100%; max-width: 1100px; }
+        .full-width-image-container { width: 100%; height: 250px; overflow: hidden; border-radius: var(--border-radius-main); margin-bottom: 25px; max-width: 100%;}
         .full-width-image-container img { width: 100%; height: 100%; object-fit: cover; }
 
         .slide-footer { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); font-size: 0.7em; color: rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; }
         .bg-dark-gradient .slide-footer, .era-feudal .slide-footer, .era-digital .slide-footer, .era-futuro .slide-footer { color: rgba(255,255,255,0.5); }
         .bg-animated-gradient-main .slide-footer { color: rgba(0,0,0,0.6); }
+        .bg-modern-5 .slide-footer { color: rgba(0,0,0,0.5); } 
         .era-primitiva .slide-footer { color: rgba(74, 59, 49, 0.7); }
         .era-industrial .slide-footer { color: rgba(61, 55, 46, 0.7); }
+        
+        section[data-background-color="#b0bec5"] .slide-footer,  
+        section[data-background-color="#cfd8dc"] .slide-footer,  
+        section[data-background-color="#eceff1"] .slide-footer { 
+            color: rgba(0,0,0,0.55);
+        }
+        section[data-background-color="#f0f4f8"] .slide-footer, 
+        section[data-background-color="#e9edf2"] .slide-footer, 
+        section[data-background-color="#f5f5f7"] .slide-footer { 
+            color: rgba(0,0,0,0.5);
+        }
+
 
         .custom-icon { width: 48px; height: 48px; margin-bottom: 15px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8em; }
         .custom-icon.tech { background-color: var(--primary-color); color: white; }
         .custom-icon.social { background-color: #34C759; color: white; }
         .custom-icon.eco { background-color: #FF9500; color: white; }
 
-        /* Estilos para a visualização da rede digital */
         .digital-network-bg {
-            background: #001f3f; /* Azul escuro base para o tema digital */
+            background: #001f3f; 
             position: relative;
-            overflow: hidden; /* Mantém as partículas contidas */
+            overflow: hidden; 
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: var(--border-radius-main); /* Mantém a borda arredondada do container */
+            border-radius: var(--border-radius-main); 
+            width: 100%; 
+            max-width: 800px; 
         }
 
         .particle {
             position: absolute;
-            background-color: rgba(0, 122, 255, 0.6); /* Azul primário, levemente transparente */
+            background-color: rgba(0, 122, 255, 0.6); 
             border-radius: 50%;
             animation: float 20s infinite linear;
-            opacity: 0; /* Começa invisível, aparece com o delay da animação */
-            box-shadow: 0 0 8px rgba(0, 122, 255, 0.5), 0 0 12px rgba(52, 231, 228, 0.4); /* Leve brilho */
+            opacity: 0; 
+            box-shadow: 0 0 8px rgba(0, 122, 255, 0.5), 0 0 12px rgba(52, 231, 228, 0.4); 
         }
 
-        @keyframes float {
+        @keyframes float { 
             0% {
                 transform: translateY(0px) translateX(0px) scale(var(--float-scale, 1));
                 opacity: 0;
             }
-            20%, 80% { /* Mantém visível por mais tempo */
+            25% { 
+                transform: translateY(calc(var(--float-y, -20px) / 2)) translateX(calc(var(--float-x, 15px) / 2)) scale(calc(var(--float-scale, 1) * 0.95));
                 opacity: 0.7;
             }
             50% {
                 transform: translateY(var(--float-y, -20px)) translateX(var(--float-x, 15px)) scale(var(--float-scale, 1));
-                opacity: 0.4; /* Opacidade reduzida no meio do ciclo */
+                opacity: 0.4;
+            }
+            75% {
+                transform: translateY(calc(var(--float-y, -20px) / 2)) translateX(calc(var(--float-x, 15px) / 2)) scale(calc(var(--float-scale, 1) * 1.05));
+                opacity: 0.6;
             }
             100% {
                 transform: translateY(0px) translateX(0px) scale(var(--float-scale, 1));
@@ -431,9 +509,38 @@
             font-weight: 600;
             text-shadow: 0 2px 12px rgba(0,0,0,0.6);
             padding: 12px 25px;
-            background-color: rgba(0, 0, 0, 0.25); /* Fundo sutil para o texto */
+            background-color: rgba(0, 0, 0, 0.25); 
             border-radius: 10px;
             letter-spacing: 0.02em;
+        }
+
+        .timeline-presentation-list {
+            list-style: none;
+            padding-left: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            text-align: center;
+            width: 100%; 
+            max-width: 900px; 
+        }
+        .timeline-presentation-list li {
+            background: rgba(var(--text-color-dark-rgb), 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: var(--secondary-color);
+            border: 1px solid rgba(var(--text-color-dark-rgb), 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .timeline-presentation-list li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(var(--text-color-dark-rgb), 0.08);
+        }
+        .timeline-presentation-list .fas {
+            margin-right: 10px;
+            color: var(--primary-color);
         }
 
     </style>
@@ -455,14 +562,8 @@
 
     <div class="reveal">
         <div class="slides">
-            <section data-era="inicio" data-transition="zoom-in fade-out" class="center-content bg-dark-gradient">
-                <h2 class="gsap-reveal-title" style="font-size: 2.8em;">O Futuro do Trabalho é <span style="color: #82c3ff;">Agora?</span></h2>
-                <p class="gsap-reveal-subtitle" style="font-size: 1.3em;">Uma jornada pela evolução laboral.</p>
-                 <div class="slide-footer">As Mudanças no Mundo do Trabalho</div>
-            </section>
-
             <section data-era="inicio" class="intro-slide center-content bg-animated-gradient-main">
-                <div class="glass-card gsap-reveal-card" style="padding: 50px;">
+                <div class="glass-card gsap-reveal-card" style="padding: 50px; width: auto; max-width: 80%;">
                     <h1 class="gsap-reveal-title">As Mudanças no Mundo do Trabalho</h1>
                     <p class="gsap-reveal-subtitle subtitle-text">Uma Perspectiva Histórica e Econômica</p>
                 </div>
@@ -470,56 +571,76 @@
             </section>
             
             <section data-era="inicio" data-background-color="#f0f4f8">
-                <h2 class="gsap-reveal-title">A Busca Contínua por Melhoria</h2>
-                <p class="gsap-reveal-text">O trabalho evolui conforme as sociedades buscam incessantemente melhorar suas condições materiais de vida.</p>
-                <h3 class="gsap-reveal-text" style="margin-top: 30px;">Fatores de Influência:</h3>
-                <div class="masonry-container">
-                    <div class="masonry-item glass-card gsap-reveal-card">
-                        <div class="custom-icon tech"><i class="fas fa-cogs"></i></div>
-                        <h4>Tecnologias Disponíveis</h4>
-                        <p>Novas ferramentas e métodos que transformam a produção.</p>
+                <div style="width:100%; max-width:1100px;"> 
+                    <h2 class="gsap-reveal-title">A Busca Contínua por Melhoria</h2>
+                    <p class="gsap-reveal-text">O trabalho evolui conforme as sociedades buscam incessantemente melhorar suas condições materiais de vida.</p>
+                    <h3 class="gsap-reveal-text" style="margin-top: 30px;">Fatores de Influência:</h3>
+                    <div class="masonry-container">
+                        <div class="masonry-item glass-card gsap-reveal-card">
+                            <div class="custom-icon tech"><i class="fas fa-cogs" aria-hidden="true"></i></div>
+                            <h4>Tecnologias Disponíveis</h4>
+                            <p>Novas ferramentas e métodos que transformam a produção.</p>
+                        </div>
+                        <div class="masonry-item glass-card gsap-reveal-card">
+                             <div class="custom-icon social"><i class="fas fa-users" aria-hidden="true"></i></div>
+                            <h4>Instituições Sociais</h4>
+                            <p>Leis, normas e costumes que moldam as relações de trabalho.</p>
+                        </div>
+                        <div class="masonry-item glass-card gsap-reveal-card">
+                             <div class="custom-icon eco"><i class="fas fa-chart-line" aria-hidden="true"></i></div>
+                            <h4>Estruturas Econômicas</h4>
+                            <p>Sistemas que organizam a produção e distribuição de bens.</p>
+                        </div>
                     </div>
-                    <div class="masonry-item glass-card gsap-reveal-card">
-                         <div class="custom-icon social"><i class="fas fa-users"></i></div>
-                        <h4>Instituições Sociais</h4>
-                        <p>Leis, normas e costumes que moldam as relações de trabalho.</p>
-                    </div>
-                    <div class="masonry-item glass-card gsap-reveal-card">
-                         <div class="custom-icon eco"><i class="fas fa-chart-line"></i></div>
-                        <h4>Estruturas Econômicas</h4>
-                        <p>Sistemas que organizam a produção e distribuição de bens.</p>
-                    </div>
+                    <p class="gsap-reveal-text" style="margin-top: 20px;"><strong>Objetivo:</strong> Analisar transformações históricas e vislumbrar tendências futuras.</p>
                 </div>
-                <p class="gsap-reveal-text" style="margin-top: 20px;"><strong>Objetivo:</strong> Analisar transformações históricas e vislumbrar tendências futuras.</p>
                  <div class="slide-footer">Introdução</div>
+            </section>
+
+            <section data-era="inicio" data-background-color="#e9edf2" class="center-content">
+                <div class="glass-card gsap-reveal-card" style="width: 90%; max-width: 900px;">
+                    <h2 class="gsap-reveal-title" style="text-align: center; margin-bottom: 30px;"><i class="fas fa-route fa-fw" style="color: var(--primary-color); margin-right:10px;" aria-hidden="true"></i>Nossa Jornada Através do Tempo</h2>
+                    <p class="gsap-reveal-subtitle" style="text-align: center; font-size: 1.1em; margin-bottom: 35px;">Exploraremos as seguintes eras e suas transformações no trabalho:</p>
+                    <ul class="timeline-presentation-list">
+                        <li class="gsap-reveal-item"><i class="fas fa-leaf" aria-hidden="true"></i>Primórdios e Sobrevivência</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-chess-rook" aria-hidden="true"></i>Era Feudal e Guildas</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-industry" aria-hidden="true"></i>Revolução Industrial</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-landmark" aria-hidden="true"></i>Século XX: Crises e Avanços</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-globe-americas" aria-hidden="true"></i>Pós-Guerra e Globalização</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-laptop-code" aria-hidden="true"></i>Era Digital Conectada</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-microchip" aria-hidden="true"></i>O Futuro Tecnológico</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-flag-checkered" aria-hidden="true"></i>Conclusão e Reflexões</li>
+                    </ul>
+                </div>
+                <div class="slide-footer">Roteiro da Apresentação</div>
             </section>
 
             <section data-era="primitiva" data-transition="slide-in fade-out" class="transition-slide era-primitiva">
                 <div class="text-container gsap-reveal-card">
                     <h2 class="gsap-reveal-title">Primórdios</h2>
-                    <p class="gsap-reveal-subtitle subtitle">Sociedades Primitivas e a Sobrevivência</p>
+                    <p class="gsap-reveal-subtitle subtitle">O Início da Jornada Laboral</p>
                 </div>
                  <div class="slide-footer">Próximo: Sociedades Primitivas</div>
             </section>
 
             <section data-era="primitiva" class="era-primitiva">
-                 <div class="glass-card gsap-reveal-card">
-                    <h2 class="gsap-reveal-title"><i class="fas fa-leaf fa-fw"></i>Primórdios: Trabalho como Sobrevivência</h2>
+                 <div class="glass-card gsap-reveal-card" style="max-width: 1000px;"> 
+                    <h2 class="gsap-reveal-title"><i class="fas fa-leaf fa-fw" aria-hidden="true"></i>Primórdios: Trabalho como Sobrevivência</h2>
                     <div class="columns-2">
                         <div>
                             <h4 class="gsap-reveal-text">Características:</h4>
                             <ul class="icon-list gsap-reveal-text">
-                                <li class="gsap-reveal-item"><i class="fas fa-bone fa-fw"></i> Trabalho = subsistência direta.</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-tools fa-fw"></i> Produtividade limitada por ferramentas rudimentares.</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-users-cog fa-fw"></i> Divisão do trabalho restrita (familiar/tribal).</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-bone fa-fw" aria-hidden="true"></i> Trabalho = subsistência direta.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-tools fa-fw" aria-hidden="true"></i> Produtividade limitada por ferramentas rudimentares.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-users-cog fa-fw" aria-hidden="true"></i> Divisão do trabalho restrita (familiar/tribal).</li>
                             </ul>
                         </div>
                         <div>
                             <h4 class="gsap-reveal-text">Limitações:</h4>
                             <ul class="icon-list gsap-reveal-text">
-                                <li class="gsap-reveal-item"><i class="fas fa-exchange-alt fa-fw"></i> Trocas econômicas mínimas.</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-cloud-sun-rain fa-fw"></i> Alta vulnerabilidade a fatores naturais.</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-box-open fa-fw"></i> Dificuldade de estoque.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-exchange-alt fa-fw" aria-hidden="true"></i> Trocas econômicas mínimas.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-cloud-sun-rain fa-fw" aria-hidden="true"></i> Alta vulnerabilidade a fatores naturais.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-box-open fa-fw" aria-hidden="true"></i> Dificuldade de estoque.</li>
                             </ul>
                         </div>
                     </div>
@@ -530,58 +651,60 @@
             <section data-era="feudal" data-transition="slide-in fade-out" class="transition-slide era-feudal">
                 <div class="text-container gsap-reveal-card">
                     <h2 class="gsap-reveal-title">Era Feudal</h2>
-                    <p class="gsap-reveal-subtitle subtitle">A Era Feudal e as Guildas</p>
+                    <p class="gsap-reveal-subtitle subtitle">Servidão, Guildas e Estrutura Social</p>
                 </div>
                  <div class="slide-footer">Próximo: Era Feudal</div>
             </section>
 
             <section data-era="feudal" class="era-feudal">
-                <h2 class="gsap-reveal-title"><i class="fas fa-chess-rook fa-fw"></i>Idade Média: Estruturas Rígidas</h2>
-                <div class="columns-2">
-                    <div class="glass-card gsap-reveal-card">
-                        <h3><i class="fas fa-tractor fa-fw"></i>No Campo (Servidão)</h3>
-                        <ul class="icon-list">
-                            <li class="gsap-reveal-item"><i class="fas fa-link fa-fw"></i>Camponeses (servos) eram ligados à terra do senhor feudal.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-hand-holding-usd fa-fw"></i>Deviam obrigações como trabalho nas terras do senhor (corveia) e parte da sua produção (talha).</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-arrows-alt-v fa-fw"></i>Mobilidade social e geográfica extremamente limitada.</li>
-                        </ul>
+                <div style="width:100%; max-width:1100px;"> 
+                    <h2 class="gsap-reveal-title"><i class="fas fa-chess-rook fa-fw" aria-hidden="true"></i>Idade Média: Estruturas Rígidas</h2>
+                    <div class="columns-2">
+                        <div class="glass-card gsap-reveal-card">
+                            <h3><i class="fas fa-tractor fa-fw" aria-hidden="true"></i>No Campo (Servidão)</h3>
+                            <ul class="icon-list">
+                                <li class="gsap-reveal-item"><i class="fas fa-link fa-fw" aria-hidden="true"></i>Camponeses (servos) eram ligados à terra do senhor feudal.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-hand-holding-usd fa-fw" aria-hidden="true"></i>Deviam obrigações como trabalho nas terras do senhor (corveia) e parte da sua produção (talha).</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-arrows-alt-v fa-fw" aria-hidden="true"></i>Mobilidade social e geográfica extremamente limitada.</li>
+                            </ul>
+                        </div>
+                        <div class="glass-card gsap-reveal-card">
+                            <h3><i class="fas fa-city fa-fw" aria-hidden="true"></i>Nas Cidades (Guildas)</h3>
+                            <ul class="icon-list">
+                                <li class="gsap-reveal-item"><i class="fas fa-hammer fa-fw" aria-hidden="true"></i>Associações de artesãos (guildas) controlavam a produção.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-balance-scale fa-fw" aria-hidden="true"></i>Regulavam preços, qualidade, técnicas de produção e o número de mestres e aprendizes.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-lock fa-fw" aria-hidden="true"></i>Embora garantissem padrões, frequentemente restringiam a concorrência e a inovação.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="glass-card gsap-reveal-card">
-                        <h3><i class="fas fa-city fa-fw"></i>Nas Cidades (Guildas)</h3>
-                        <ul class="icon-list">
-                            <li class="gsap-reveal-item"><i class="fas fa-hammer fa-fw"></i>Associações de artesãos (guildas) controlavam a produção.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-balance-scale fa-fw"></i>Regulavam preços, qualidade, técnicas de produção e o número de mestres e aprendizes.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-lock fa-fw"></i>Embora garantissem padrões, frequentemente restringiam a concorrência e a inovação.</li>
-                        </ul>
-                    </div>
+                    <p class="gsap-reveal-text" style="margin-top: 15px;">A servidão prendia os camponeses à terra, limitando sua liberdade e oportunidades. Nas cidades, as guildas exerciam um controle estrito sobre os ofícios, ditando quem poderia trabalhar, como o trabalho deveria ser feito e a que preço os produtos seriam vendidos, o que muitas vezes desencorajava novas técnicas ou a expansão da produção para além das necessidades locais.</p>
                 </div>
-                <p class="gsap-reveal-text" style="margin-top: 15px;">A servidão prendia os camponeses à terra, limitando sua liberdade e oportunidades. Nas cidades, as guildas exerciam um controle estrito sobre os ofícios, ditando quem poderia trabalhar, como o trabalho deveria ser feito e a que preço os produtos seriam vendidos, o que muitas vezes desencorajava novas técnicas ou a expansão da produção para além das necessidades locais.</p>
                  <div class="slide-footer">Era Feudal e Guildas</div>
             </section>
 
             <section data-era="industrial" data-transition="slide-in fade-out" class="transition-slide era-industrial">
                 <div class="text-container gsap-reveal-card">
-                    <h2 class="gsap-reveal-title">A Era das Máquinas</h2>
-                    <p class="gsap-reveal-subtitle subtitle">Revolução Industrial: Inovação e Urbanização</p>
+                    <h2 class="gsap-reveal-title">Era Industrial</h2>
+                    <p class="gsap-reveal-subtitle subtitle">Máquinas, Fábricas e a Nova Sociedade</p>
                 </div>
-                 <div class="slide-footer">Próximo: Revolução Industrial</div>
+                 <div class="slide-footer">Próximo: Alvorada da Indústria</div>
             </section>
 
             <section data-era="industrial" class="era-industrial">
-                <div class="glass-card gsap-reveal-card">
-                    <h2 class="gsap-reveal-title"><i class="fas fa-industry fa-fw"></i>Alvorada da Indústria</h2>
+                <div class="glass-card gsap-reveal-card" style="max-width:900px;">
+                    <h2 class="gsap-reveal-title"><i class="fas fa-industry fa-fw" aria-hidden="true"></i>Alvorada da Indústria</h2>
                     <h3 class="gsap-reveal-text">Transformações Tecnológicas Chave:</h3>
                     <div class="masonry-container" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
                         <div class="masonry-item glass-card gsap-reveal-card" style="text-align: center;">
-                            <i class="fas fa-cogs fa-3x gsap-reveal-icon" style="color: #c0392b; margin-bottom:10px;"></i>
+                            <i class="fas fa-cogs fa-3x gsap-reveal-icon" style="color: #c0392b; margin-bottom:10px;" aria-hidden="true"></i>
                             <h4>Máquina a Vapor</h4>
                         </div>
                         <div class="masonry-item glass-card gsap-reveal-card" style="text-align: center;">
-                            <i class="fas fa-cog fa-3x gsap-reveal-icon" style="color: #c0392b; margin-bottom:10px; animation: fa-spin 4s infinite linear;"></i> 
+                            <i class="fas fa-cog fa-3x gsap-reveal-icon" style="color: #c0392b; margin-bottom:10px; animation: fa-spin 4s infinite linear;" aria-hidden="true"></i> 
                             <h4>Tear Mecânico</h4>
                         </div>
                          <div class="masonry-item glass-card gsap-reveal-card" style="text-align: center;">
-                            <i class="fas fa-building fa-3x gsap-reveal-icon" style="color: #c0392b; margin-bottom:10px;"></i>
+                            <i class="fas fa-building fa-3x gsap-reveal-icon" style="color: #c0392b; margin-bottom:10px;" aria-hidden="true"></i>
                             <h4>Surgimento de Fábricas</h4>
                         </div>
                     </div>
@@ -590,13 +713,13 @@
             </section>
             
             <section data-era="industrial" class="center-content era-industrial">
-                <div class="glass-card gsap-reveal-card" style="text-align: center;">
-                    <h2 class="gsap-reveal-title"><i class="fas fa-people-carry fa-fw"></i>O Grande Êxodo Rural</h2>
+                <div class="glass-card gsap-reveal-card" style="text-align: center; max-width: 800px;">
+                    <h2 class="gsap-reveal-title"><i class="fas fa-people-carry fa-fw" aria-hidden="true"></i>O Grande Êxodo Rural</h2>
                     <p class="gsap-reveal-text">A industrialização e as novas oportunidades de trabalho nas fábricas atraíram um grande número de pessoas do campo para as cidades, transformando radicalmente a demografia e a paisagem social.</p>
                     <div class="exodo-rural-icons gsap-reveal-card">
-                        <i class="fas fa-seedling" title="Campo"></i>
-                        <i class="fas fa-long-arrow-alt-right exodo-arrow" title="Migração"></i>
-                        <i class="fas fa-city" title="Cidade"></i>
+                        <i class="fas fa-seedling" title="Campo" aria-hidden="true"></i>
+                        <i class="fas fa-long-arrow-alt-right exodo-arrow" title="Migração" aria-hidden="true"></i>
+                        <i class="fas fa-city" title="Cidade" aria-hidden="true"></i>
                     </div>
                     <p class="gsap-reveal-text" style="font-size: 0.9em;">Essa migração em massa alimentou o crescimento urbano e forneceu a mão de obra necessária para a expansão industrial, mas também gerou novos desafios sociais nas cidades em rápido crescimento.</p>
                 </div>
@@ -604,31 +727,33 @@
             </section>
 
             <section data-era="industrial" class="era-industrial">
-                <h2 class="gsap-reveal-title"><i class="fas fa-handshake fa-fw"></i>Mercado de Trabalho Moderno</h2>
-                <div class="columns-2">
-                    <div class="glass-card gsap-reveal-card">
-                        <h3 class="gsap-reveal-text">Transformações Econômicas:</h3>
-                        <ul class="icon-list gsap-reveal-text">
-                            <li class="gsap-reveal-item"><i class="fas fa-file-signature fa-fw"></i>Trabalho como <strong>relação contratual</strong>.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-chart-bar fa-fw"></i>Salários por fatores de <strong>mercado</strong>.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-user-tie fa-fw"></i>Trabalhador como agente <strong>autônomo</strong>.</li>
-                        </ul>
-                    </div>
-                    <div class="glass-card gsap-reveal-card">
-                        <h3 class="gsap-reveal-text">Produção em Massa:</h3>
-                        <ul class="icon-list gsap-reveal-text">
-                            <li class="gsap-reveal-item"><i class="fas fa-shopping-cart fa-fw"></i>Bens se tornam <strong>mais baratos</strong>.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-users fa-fw"></i>Trabalhadores como <strong>consumidores</strong>.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-sync-alt fa-fw"></i>Ciclo produção-consumo impulsiona.</li>
-                        </ul>
+                <div style="width:100%; max-width:1100px;"> 
+                    <h2 class="gsap-reveal-title"><i class="fas fa-handshake fa-fw" aria-hidden="true"></i>Mercado de Trabalho Moderno</h2>
+                    <div class="columns-2">
+                        <div class="glass-card gsap-reveal-card">
+                            <h3 class="gsap-reveal-text">Transformações Econômicas:</h3>
+                            <ul class="icon-list gsap-reveal-text">
+                                <li class="gsap-reveal-item"><i class="fas fa-file-signature fa-fw" aria-hidden="true"></i>Trabalho como <strong>relação contratual</strong>.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-chart-bar fa-fw" aria-hidden="true"></i>Salários por fatores de <strong>mercado</strong>.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-user-tie fa-fw" aria-hidden="true"></i>Trabalhador como agente <strong>autônomo</strong>.</li>
+                            </ul>
+                        </div>
+                        <div class="glass-card gsap-reveal-card">
+                            <h3 class="gsap-reveal-text">Produção em Massa:</h3>
+                            <ul class="icon-list gsap-reveal-text">
+                                <li class="gsap-reveal-item"><i class="fas fa-shopping-cart fa-fw" aria-hidden="true"></i>Bens se tornam <strong>mais baratos</strong>.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-users fa-fw" aria-hidden="true"></i>Trabalhadores como <strong>consumidores</strong>.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-sync-alt fa-fw" aria-hidden="true"></i>Ciclo produção-consumo impulsiona.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                  <div class="slide-footer">Revolução Industrial - Parte 2</div>
             </section>
 
             <section data-era="industrial" class="center-content era-industrial">
-                 <div class="glass-card gsap-reveal-card" style="text-align: left;">
-                    <h2 class="gsap-reveal-title"><i class="fas fa-chart-line fa-fw era-industrial"></i>Mais Produtos, Mais Consumo</h2>
+                 <div class="glass-card gsap-reveal-card" style="text-align: left; max-width: 700px;">
+                    <h2 class="gsap-reveal-title"><i class="fas fa-chart-line fa-fw" aria-hidden="true"></i>Mais Produtos, Mais Consumo</h2>
                     <ul class="gsap-reveal-text" style="padding-left: 25px; margin-top: 20px;">
                         <li class="gsap-reveal-item">Produção em massa reduziu os preços.</li>
                         <li class="gsap-reveal-item">Bens antes luxuosos tornaram-se acessíveis.</li>
@@ -647,131 +772,130 @@
             </section>
 
             <section data-era="seculoXX" data-background-color="#b0bec5"> 
-                <h2 class="gsap-reveal-title"><i class="fas fa-exclamation-triangle fa-fw"></i>Século XX: Crises e Intervenções</h2>
-                <h3 class="gsap-reveal-subtitle" style="font-size: 1.1em; margin-bottom: 15px;">A Grande Depressão: Causas, Respostas e Impactos Globais</h3>
-                <div class="masonry-container">
-                    {/* Card de Contexto */}
-                    <div class="masonry-item glass-card compact-card gsap-reveal-card">
-                        <h4><i class="fas fa-history fa-fw"></i>Contexto da Crise:</h4>
-                        <ul class="icon-list">
-                            <li class="gsap-reveal-item"><i class="fas fa-money-bill-wave fa-fw"></i>Euforia e expansão (anos 20).</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-store-slash fa-fw"></i>Quebra da Bolsa de NY (1929).</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-globe fa-fw"></i>Efeito dominó global.</li>
-                        </ul>
+                <div style="width:100%; max-width:1200px;"> 
+                    <h2 class="gsap-reveal-title"><i class="fas fa-exclamation-triangle fa-fw" aria-hidden="true"></i>Século XX: Crises e Intervenções</h2>
+                    <h3 class="gsap-reveal-subtitle" style="font-size: 1.1em; margin-bottom: 15px;">A Grande Depressão: Causas, Respostas e Impactos Globais</h3>
+                    <div class="masonry-container">
+                        <div class="masonry-item glass-card compact-card gsap-reveal-card">
+                            <h4><i class="fas fa-history fa-fw" aria-hidden="true"></i>Contexto da Crise:</h4>
+                            <ul class="icon-list">
+                                <li class="gsap-reveal-item"><i class="fas fa-money-bill-wave fa-fw" aria-hidden="true"></i>Euforia e expansão (anos 20).</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-store-slash fa-fw" aria-hidden="true"></i>Quebra da Bolsa de NY (1929).</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-globe fa-fw" aria-hidden="true"></i>Efeito dominó global.</li>
+                            </ul>
+                        </div>
+                        <div class="masonry-item glass-card compact-card gsap-reveal-card">
+                            <h4><i class="fas fa-chess-pawn fa-fw" aria-hidden="true"></i>Políticas e Consequências:</h4>
+                            <ul class="icon-list">
+                                <li class="gsap-reveal-item"><i class="fas fa-file-signature fa-fw icon-smoot-hawley" aria-hidden="true"></i><strong>Lei Smoot-Hawley (EUA):</strong> Aumento de tarifas, visando proteger mercado interno.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-exchange-alt fa-fw icon-retaliation" aria-hidden="true"></i><strong>Retaliação e Colapso Comercial:</strong> Outras nações elevam tarifas; comércio mundial despenca (queda ~66% 1929-34), aprofundando a crise.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-landmark fa-fw icon-new-deal" aria-hidden="true"></i>Intervenção estatal (New Deal).</li>
+                            </ul>
+                        </div>
+                        <div class="masonry-item glass-card compact-card gsap-reveal-card">
+                            <h4><i class="fas fa-map-marker-alt fa-fw" style="color: #4CAF50;" aria-hidden="true"></i> Reflexos no Brasil:</h4>
+                            <ul class="icon-list">
+                                <li class="gsap-reveal-item"><i class="fas fa-coffee fa-fw icon-coffee-crisis" aria-hidden="true"></i>Crise do café (principal exportação).</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-arrow-down fa-fw icon-price-drop" aria-hidden="true"></i>Queda drástica de preços/demanda.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-fire fa-fw icon-stock-burn" aria-hidden="true"></i>Queima de estoques de café.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-industry fa-fw icon-industrialization-stimulus" aria-hidden="true"></i>Estímulo à diversificação e industrialização (substituição de importações).</li>
+                            </ul>
+                        </div>
                     </div>
-                    {/* Card de Políticas Adotadas */}
-                    <div class="masonry-item glass-card compact-card gsap-reveal-card">
-                        <h4><i class="fas fa-chess-pawn fa-fw"></i>Políticas e Consequências:</h4>
-                        <ul class="icon-list">
-                            <li class="gsap-reveal-item"><i class="fas fa-file-signature fa-fw" style="color: #c0392b;"></i><strong>Lei Smoot-Hawley (EUA):</strong> Aumento de tarifas, visando proteger mercado interno.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-exchange-alt fa-fw" style="color: #e74c3c;"></i><strong>Retaliação e Colapso Comercial:</strong> Outras nações elevam tarifas; comércio mundial despenca (queda ~66% 1929-34), aprofundando a crise.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-landmark fa-fw"></i>Intervenção estatal (New Deal).</li>
-                        </ul>
-                    </div>
-                    {/* Card de Impactos no Brasil */}
-                    <div class="masonry-item glass-card compact-card gsap-reveal-card">
-                        <h4><i class="fas fa-map-marker-alt fa-fw" style="color: #4CAF50;"></i> Reflexos no Brasil:</h4>
-                        <ul class="icon-list">
-                            <li class="gsap-reveal-item"><i class="fas fa-coffee fa-fw" style="color: #8D6E63;"></i>Crise do café (principal exportação).</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-arrow-down fa-fw" style="color: #E57373;"></i>Queda drástica de preços/demanda.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-fire fa-fw" style="color: #FFB74D;"></i>Queima de estoques de café.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-industry fa-fw" style="color: #757575;"></i>Estímulo à diversificação e industrialização (substituição de importações).</li>
-                        </ul>
-                    </div>
+                    <blockquote class="gsap-reveal-text" style="margin-top:10px; font-style: normal; text-align: justify; padding: 10px 15px; background: rgba(0,0,0,0.04); border-left: 3px solid var(--primary-color); border-radius: 6px; font-size: 0.9em;">
+                        O otimismo dos "anos loucos" (1920) fomentou especulação. Muitos investiam com capital emprestado, inflando o valor das ações. Com a quebra da confiança, o impacto foi catastrófico.
+                    </blockquote>
                 </div>
-                {/* Bloco de Citação sobre Especulação */}
-                <blockquote class="gsap-reveal-text" style="margin-top:10px; font-style: normal; text-align: justify; padding: 10px 15px; background: rgba(0,0,0,0.04); border-left: 3px solid var(--primary-color); border-radius: 6px; font-size: 0.9em;">
-                    O otimismo dos "anos loucos" (1920) fomentou especulação. Muitos investiam com capital emprestado, inflando o valor das ações. Com a quebra da confiança, o impacto foi catastrófico.
-                </blockquote>
                  <div class="slide-footer">Século XX - Crises e Impactos</div>
             </section>
 
             <section data-era="seculoXX" data-background-color="#cfd8dc"> 
-                <div class="glass-card gsap-reveal-card">
-                    <h2 class="gsap-reveal-title"><i class="fas fa-balance-scale-left fa-fw"></i>Regulamentação e Mercado</h2>
+                <div class="glass-card gsap-reveal-card" style="max-width: 900px;">
+                    <h2 class="gsap-reveal-title"><i class="fas fa-balance-scale-left fa-fw" aria-hidden="true"></i>Regulamentação e Mercado</h2>
                     <h3 class="gsap-reveal-text">Desenvolvimento de Legislações Trabalhistas:</h3>
                     <ul class="icon-list gsap-reveal-text" style="padding-left:0;">
-                        <li class="gsap-reveal-item"><i class="fas fa-dollar-sign fa-fw"></i> Estabelecimento de Salário Mínimo.</li>
-                        <li class="gsap-reveal-item"><i class="fas fa-clock fa-fw"></i> Definição de Limites para a Jornada de Trabalho.</li>
-                        <li class="gsap-reveal-item"><i class="fas fa-file-contract fa-fw"></i> Criação de Regras para Contratação e Demissão.</li>
-                        <li class="gsap-reveal-item"><i class="fas fa-shield-alt fa-fw"></i> Normas de Segurança e Saúde no Trabalho.</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-dollar-sign fa-fw" aria-hidden="true"></i> Estabelecimento de Salário Mínimo.</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-clock fa-fw" aria-hidden="true"></i> Definição de Limites para a Jornada de Trabalho.</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-file-contract fa-fw" aria-hidden="true"></i> Criação de Regras para Contratação e Demissão.</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-shield-alt fa-fw" aria-hidden="true"></i> Normas de Segurança e Saúde no Trabalho.</li>
                     </ul>
                     <p class="gsap-reveal-text" style="margin-top: 20px;">
                         No Brasil, grande parte dessas legislações trabalhistas foi consolidada durante a Era Vargas. Esse movimento foi influenciado pelas transformações sociais e econômicas globais, incluindo as repercussões da crise de 1929, que geraram um ambiente propício para um Estado mais interventor. A população, buscando maior segurança e proteção social, via em líderes como Vargas a promessa de reformas. A Consolidação das Leis do Trabalho (CLT), promulgada em 1943, tornou-se o marco desse período, unificando diversas normas e direitos trabalhistas.
                     </p>
-                    <img src="https://placehold.co/350x150/78909c/FFFFFF?text=Legislação+Trabalhista" alt="Balança Legal Estilizada" class="gsap-reveal-card" style="width: 100%; max-width: 300px; border-radius: var(--border-radius-main); margin: 15px auto; display: block;" onerror="this.src='https://placehold.co/350x150/cccccc/FFFFFF?text=Err'">
                 </div>
                  <div class="slide-footer">Século XX - Regulamentação</div>
             </section>
 
             <section data-era="seculoXX" data-background-color="#eceff1"> 
-                <h2 class="gsap-reveal-title" style="text-align: center;"><i class="fas fa-globe-americas fa-fw"></i>Século XX: Guerras e o Novo Cenário do Trabalho</h2>
-                
-                <div class="masonry-container" style="margin-top: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-                    <div class="masonry-item glass-card gsap-reveal-card">
-                        <h4><i class="fas fa-female fa-fw" style="color: #e91e63;"></i>Mulheres: A Nova Força de Trabalho</h4>
-                        <ul class="icon-list">
-                            <li class="gsap-reveal-item"><i class="fas fa-industry fa-fw" style="color: #607D8B;"></i>Entrada massiva em fábricas, transportes e serviços essenciais.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-tools fa-fw" style="color: #795548;"></i>Ocupação de postos tradicionalmente masculinos ("Rosie the Riveter").</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-vote-yea fa-fw" style="color: #9C27B0;"></i>Impacto nas percepções sociais e impulso para o sufrágio e direitos.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-wrench fa-fw" style="color: #FF9800;"></i>Demonstração de capacidade em áreas técnicas e de gestão.</li>
-                        </ul>
-                    </div>
+                <div style="width:100%; max-width:1200px;"> 
+                    <h2 class="gsap-reveal-title" style="text-align: center;"><i class="fas fa-globe-americas fa-fw" aria-hidden="true"></i>Século XX: Guerras e o Novo Cenário do Trabalho</h2>
+                    
+                    <div class="masonry-container" style="margin-top: 20px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                        <div class="masonry-item glass-card gsap-reveal-card">
+                            <h4><i class="fas fa-female fa-fw icon-women-workforce" aria-hidden="true"></i>Mulheres: A Nova Força de Trabalho</h4>
+                            <ul class="icon-list">
+                                <li class="gsap-reveal-item"><i class="fas fa-industry fa-fw icon-war-production-industry" aria-hidden="true"></i>Entrada massiva em fábricas, transportes e serviços essenciais.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-tools fa-fw icon-war-production-tools" aria-hidden="true"></i>Ocupação de postos tradicionalmente masculinos ("Rosie the Riveter").</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-vote-yea fa-fw icon-war-production-vote" aria-hidden="true"></i>Impacto nas percepções sociais e impulso para o sufrágio e direitos.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-wrench fa-fw icon-war-production-wrench" aria-hidden="true"></i>Demonstração de capacidade em áreas técnicas e de gestão.</li>
+                            </ul>
+                        </div>
 
-                    <div class="masonry-item glass-card gsap-reveal-card">
-                        <h4><i class="fas fa-cogs fa-fw" style="color: #03A9F4;"></i>Produção e Condições em Tempos de Guerra</h4>
-                        <ul class="icon-list">
-                            <li class="gsap-reveal-item"><i class="fas fa-fighter-jet fa-fw" style="color: #4CAF50;"></i>Economias convertidas para o "esforço de guerra" (produção bélica).</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-clock fa-fw" style="color: #FFC107;"></i>Jornadas exaustivas e pressão por aumento de produtividade.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-users-cog fa-fw" style="color: #3F51B5;"></i>Intervenção estatal na alocação de mão de obra e recursos.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-ban fa-fw" style="color: #f44336;"></i>Racionamento de bens e impacto no padrão de vida dos trabalhadores.</li>
-                        </ul>
-                    </div>
+                        <div class="masonry-item glass-card gsap-reveal-card">
+                            <h4><i class="fas fa-cogs fa-fw" style="color: #03A9F4;" aria-hidden="true"></i>Produção e Condições em Tempos de Guerra</h4>
+                            <ul class="icon-list">
+                                <li class="gsap-reveal-item"><i class="fas fa-fighter-jet fa-fw icon-war-effort-jet" aria-hidden="true"></i>Economias convertidas para o "esforço de guerra" (produção bélica).</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-clock fa-fw icon-war-effort-clock" aria-hidden="true"></i>Jornadas exaustivas e pressão por aumento de produtividade.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-users-cog fa-fw icon-war-effort-users-cog" aria-hidden="true"></i>Intervenção estatal na alocação de mão de obra e recursos.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-ban fa-fw icon-war-effort-ban" aria-hidden="true"></i>Racionamento de bens e impacto no padrão de vida dos trabalhadores.</li>
+                            </ul>
+                        </div>
 
-                    <div class="masonry-item glass-card gsap-reveal-card">
-                        <h4><i class="fas fa-users fa-fw" style="color: #009688;"></i>Legados e Transformações Laborais Pós-Guerras</h4>
-                        <ul class="icon-list">
-                            <li class="gsap-reveal-item"><i class="fas fa-hard-hat fa-fw" style="color: #FF5722;"></i>Reconstrução demandou vasta mão de obra e impulsionou a construção civil.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-chart-line fa-fw" style="color: #8BC34A;"></i>Avanços tecnológicos de guerra adaptados para a indústria.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-child fa-fw" style="color: #9E9E9E;"></i>Lento declínio do trabalho infantil em algumas regiões, mas persistência em outras.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-university fa-fw" style="color: #673AB7;"></i>Maior valorização da formação técnica e especializada.</li>
-                        </ul>
+                        <div class="masonry-item glass-card gsap-reveal-card">
+                            <h4><i class="fas fa-users fa-fw" style="color: #009688;" aria-hidden="true"></i>Legados e Transformações Laborais Pós-Guerras</h4>
+                            <ul class="icon-list">
+                                <li class="gsap-reveal-item"><i class="fas fa-hard-hat fa-fw icon-post-war-reconstruction" aria-hidden="true"></i>Reconstrução demandou vasta mão de obra e impulsionou a construção civil.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-chart-line fa-fw icon-post-war-tech" aria-hidden="true"></i>Avanços tecnológicos de guerra adaptados para a indústria.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-child fa-fw icon-post-war-child-labor" aria-hidden="true"></i>Lento declínio do trabalho infantil em algumas regiões, mas persistência em outras.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-university fa-fw icon-post-war-education" aria-hidden="true"></i>Maior valorização da formação técnica e especializada.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                  <div class="slide-footer">Século XX - Guerras e Trabalho</div>
             </section>
 
-            <section data-era="posguerra" data-transition="slide-in fade-out" class="transition-slide bg-modern-4"> 
+            <section data-era="posguerra" data-transition="slide-in fade-out" class="transition-slide era-digital">
                 <div class="text-container gsap-reveal-card">
-                    <h2 class="gsap-reveal-title light-text">Reconstrução Global</h2>
-                    <p class="gsap-reveal-subtitle subtitle light-text">Pós-Guerra e a Expansão Econômica</p>
+                    <h2 class="gsap-reveal-title">Era Digital</h2>
+                    <p class="gsap-reveal-subtitle subtitle">Conectividade e a Transformação Global</p>
                 </div>
-                 <div class="slide-footer">Próximo: Pós-Guerra</div>
+                 <div class="slide-footer">Próximo: Pós-Guerra e Globalização</div>
             </section>
 
             <section data-era="posguerra" class="bg-animated-gradient-main"> 
-                 <div class="glass-card gsap-reveal-card">
-                    <h2 class="gsap-reveal-title"><i class="fas fa-globe fa-fw"></i>Pós-Guerra: Reconstrução e Globalização</h2>
+                 <div class="glass-card gsap-reveal-card" style="max-width: 1100px;">
+                    <h2 class="gsap-reveal-title"><i class="fas fa-globe fa-fw" aria-hidden="true"></i>Pós-Guerra: Reconstrução e Globalização</h2>
                     <div class="columns-2">
                         <div>
                             <h4 class="gsap-reveal-text">Recuperação Econômica:</h4>
                             <ul class="icon-list gsap-reveal-text">
-                                <li class="gsap-reveal-item"><i class="fas fa-building fa-fw"></i>Rápida reconstrução industrial e de infraestrutura.</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-laptop-code fa-fw" style="color: #FF5722;"></i>Avanços tecnológicos (ex: transistores, primeiros computadores) pavimentam o caminho para a Revolução Digital e novas formas de trabalho.</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-chart-line fa-fw"></i>Aumento da produtividade e do padrão de vida em muitos países.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-building fa-fw" aria-hidden="true"></i>Rápida reconstrução industrial e de infraestrutura.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-laptop-code fa-fw tech-advances" aria-hidden="true"></i>Avanços tecnológicos (ex: transistores, primeiros computadores) pavimentam o caminho para a Revolução Digital e novas formas de trabalho.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-chart-line fa-fw" aria-hidden="true"></i>Aumento da produtividade e do padrão de vida em muitos países.</li>
                             </ul>
                         </div>
                         <div>
                             <h4 class="gsap-reveal-text">Globalização Comercial:</h4>
                             <ul class="icon-list gsap-reveal-text">
-                                <li class="gsap-reveal-item"><i class="fas fa-handshake fa-fw"></i>Redução de barreiras tarifárias (GATT/OMC).</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-plane fa-fw"></i>Intensificação do comércio e dos fluxos de investimento.</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-puzzle-piece fa-fw"></i>Especialização produtiva e cadeias de valor globais.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-handshake fa-fw" aria-hidden="true"></i>Redução de barreiras tarifárias (GATT/OMC).</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-plane fa-fw" aria-hidden="true"></i>Intensificação do comércio e dos fluxos de investimento.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-puzzle-piece fa-fw" aria-hidden="true"></i>Especialização produtiva e cadeias de valor globais.</li>
                             </ul>
                         </div>
                     </div>
                     <blockquote class="gsap-reveal-card" style="text-align: center; margin-top: 40px; font-size: 1.05em; width: 90%; margin-left: auto; margin-right: auto; background: rgba(var(--text-color-dark-rgb, 29, 29, 31), 0.05); color: var(--secondary-color); border-left: 4px solid var(--primary-color); padding: 20px; border-radius: var(--border-radius-main);">
-                        <i class="fas fa-chart-area fa-fw" style="color: var(--primary-color); font-size: 1.8em; margin-bottom: 10px; display: block;"></i>
+                        <i class="fas fa-chart-area fa-fw" style="color: var(--primary-color); font-size: 1.8em; margin-bottom: 10px; display: block;" aria-hidden="true"></i>
                         Entre 1948 e 1973 (os "anos dourados"), o comércio mundial cresceu exponencialmente, impulsionado pela redução de tarifas e acordos como o GATT, transformando mercados e criando novas oportunidades e modelos de trabalho em escala global.
                     </blockquote>
                 </div>
@@ -787,99 +911,100 @@
             </section>
 
             <section data-era="digital" class="era-digital">
-                <h2 class="gsap-reveal-title"><i class="fas fa-wifi fa-fw"></i>A Revolução Digital Transforma Tudo</h2>
-                 <div class="full-width-image-container gsap-reveal-card digital-network-bg" style="height: 240px;">
-                    <span class="overlay-text gsap-reveal-title">Visualizando a Rede Digital</span>
-                    {/* Partículas adicionadas manualmente para efeito visual */}
-                    <div class="particle" style="width: 5px; height: 5px; left: 10%; top: 20%; animation-duration: 15s; animation-delay: 0s; --float-x: 10px; --float-y: -15px;"></div>
-                    <div class="particle" style="width: 8px; height: 8px; left: 25%; top: 50%; animation-duration: 20s; animation-delay: 1s; --float-x: -12px; --float-y: 20px; --float-scale: 1.3;"></div>
-                    <div class="particle" style="width: 3px; height: 3px; left: 40%; top: 80%; animation-duration: 12s; animation-delay: 0.5s; --float-x: 5px; --float-y: -10px;"></div>
-                    <div class="particle" style="width: 6px; height: 6px; left: 55%; top: 10%; animation-duration: 18s; animation-delay: 1.5s; --float-x: -8px; --float-y: 12px; --float-scale: 1.1;"></div>
-                    <div class="particle" style="width: 4px; height: 4px; left: 70%; top: 65%; animation-duration: 16s; animation-delay: 0.2s; --float-x: 15px; --float-y: -5px;"></div>
-                    <div class="particle" style="width: 7px; height: 7px; left: 85%; top: 30%; animation-duration: 19s; animation-delay: 1.2s; --float-x: -10px; --float-y: 18px; --float-scale: 1.25;"></div>
-                    <div class="particle" style="width: 5px; height: 5px; left: 5%; top: 70%; animation-duration: 14s; animation-delay: 0.8s; --float-x: 8px; --float-y: -12px;"></div>
-                    <div class="particle" style="width: 6px; height: 6px; left: 90%; top: 55%; animation-duration: 17s; animation-delay: 0.3s; --float-x: -6px; --float-y: 10px;"></div>
-                    <div class="particle" style="width: 3px; height: 3px; left: 50%; top: 40%; animation-duration: 22s; animation-delay: 2s; --float-x: 20px; --float-y: -25px; background-color: rgba(52, 231, 228, 0.7);"></div>
-                    <div class="particle" style="width: 5px; height: 5px; left: 30%; top: 15%; animation-duration: 13s; animation-delay: 1.3s; --float-x: -15px; --float-y: 22px; background-color: rgba(52, 231, 228, 0.7);"></div>
-                    <div class="particle" style="width: 4px; height: 4px; left: 60%; top: 85%; animation-duration: 15s; animation-delay: 2.5s; --float-x: -5px; --float-y: -18px; background-color: rgba(204, 238, 255, 0.6);"></div>
-                    <div class="particle" style="width: 7px; height: 7px; left: 20%; top: 5%; animation-duration: 21s; animation-delay: 0.7s; --float-x: 12px; --float-y: 15px; background-color: rgba(173, 216, 230, 0.7);"></div>
-                </div>
-                <div class="masonry-container" style="margin-top: 25px;">
-                    <div class="masonry-item glass-card gsap-reveal-card">
-                        <i class="fas fa-globe-americas fa-2x gsap-reveal-icon" style="margin-bottom:10px;"></i>
-                        <h4>Impacto da Internet</h4>
-                        <p>Redução de custos de comunicação. Coordenação global.</p>
+                <div style="width:100%; max-width:1100px;"> 
+                    <h2 class="gsap-reveal-title"><i class="fas fa-wifi fa-fw" aria-hidden="true"></i>A Revolução Digital Transforma Tudo</h2>
+                     <div class="full-width-image-container gsap-reveal-card digital-network-bg" style="height: 240px;">
+                        <span class="overlay-text gsap-reveal-title">Visualizando a Rede Digital</span>
+                        <div class="particle" style="width: 5px; height: 5px; left: 10%; top: 20%; animation-duration: 15s; animation-delay: 0s; --float-x: 10px; --float-y: -15px;"></div>
+                        <div class="particle" style="width: 8px; height: 8px; left: 25%; top: 50%; animation-duration: 20s; animation-delay: 1s; --float-x: -12px; --float-y: 20px; --float-scale: 1.3;"></div>
+                        <div class="particle" style="width: 3px; height: 3px; left: 40%; top: 80%; animation-duration: 12s; animation-delay: 0.5s; --float-x: 5px; --float-y: -10px;"></div>
+                        <div class="particle" style="width: 6px; height: 6px; left: 55%; top: 10%; animation-duration: 18s; animation-delay: 1.5s; --float-x: -8px; --float-y: 12px; --float-scale: 1.1;"></div>
+                        <div class="particle" style="width: 4px; height: 4px; left: 70%; top: 65%; animation-duration: 16s; animation-delay: 0.2s; --float-x: 15px; --float-y: -5px;"></div>
+                        <div class="particle" style="width: 7px; height: 7px; left: 85%; top: 30%; animation-duration: 19s; animation-delay: 1.2s; --float-x: -10px; --float-y: 18px; --float-scale: 1.25;"></div>
+                        <div class="particle" style="width: 5px; height: 5px; left: 5%; top: 70%; animation-duration: 14s; animation-delay: 0.8s; --float-x: 8px; --float-y: -12px;"></div>
+                        <div class="particle" style="width: 6px; height: 6px; left: 90%; top: 55%; animation-duration: 17s; animation-delay: 0.3s; --float-x: -6px; --float-y: 10px;"></div>
+                        <div class="particle" style="width: 3px; height: 3px; left: 50%; top: 40%; animation-duration: 22s; animation-delay: 2s; --float-x: 20px; --float-y: -25px; background-color: rgba(52, 231, 228, 0.7);"></div>
+                        <div class="particle" style="width: 5px; height: 5px; left: 30%; top: 15%; animation-duration: 13s; animation-delay: 1.3s; --float-x: -15px; --float-y: 22px; background-color: rgba(52, 231, 228, 0.7);"></div>
+                        <div class="particle" style="width: 4px; height: 4px; left: 60%; top: 85%; animation-duration: 15s; animation-delay: 2.5s; --float-x: -5px; --float-y: -18px; background-color: rgba(204, 238, 255, 0.6);"></div>
+                        <div class="particle" style="width: 7px; height: 7px; left: 20%; top: 5%; animation-duration: 21s; animation-delay: 0.7s; --float-x: 12px; --float-y: 15px; background-color: rgba(173, 216, 230, 0.7);"></div>
                     </div>
-                    <div class="masonry-item glass-card gsap-reveal-card">
-                        <i class="fas fa-briefcase fa-2x gsap-reveal-icon" style="margin-bottom:10px;"></i>
-                        <h4>Economia de Plataformas</h4>
-                        <p>"Gig economy", novas formas de contratação e serviços.</p>
-                    </div>
-                    <div class="masonry-item glass-card gsap-reveal-card">
-                        <i class="fas fa-laptop-house fa-2x gsap-reveal-icon" style="margin-bottom:10px;"></i>
-                        <h4>Trabalho Remoto/Híbrido</h4>
-                        <p>Flexibilidade e novos modelos respondendo a tecnologias.</p>
+                    <div class="masonry-container" style="margin-top: 25px;">
+                        <div class="masonry-item glass-card gsap-reveal-card">
+                            <i class="fas fa-globe-americas fa-2x gsap-reveal-icon" style="margin-bottom:10px;" aria-hidden="true"></i>
+                            <h4>Impacto da Internet</h4>
+                            <p>Redução de custos de comunicação. Coordenação global.</p>
+                        </div>
+                        <div class="masonry-item glass-card gsap-reveal-card">
+                            <i class="fas fa-briefcase fa-2x gsap-reveal-icon" style="margin-bottom:10px;" aria-hidden="true"></i>
+                            <h4>Economia de Plataformas</h4>
+                            <p>"Gig economy", novas formas de contratação e serviços.</p>
+                        </div>
+                        <div class="masonry-item glass-card gsap-reveal-card">
+                            <i class="fas fa-laptop-house fa-2x gsap-reveal-icon" style="margin-bottom:10px;" aria-hidden="true"></i>
+                            <h4>Trabalho Remoto/Híbrido</h4>
+                            <p>Flexibilidade e novos modelos respondendo a tecnologias.</p>
+                        </div>
                     </div>
                 </div>
                  <div class="slide-footer">Era Digital - Novos Modelos</div>
             </section>
 
-            <section data-era="digital" class="center-content era-digital">
-                <div class="glass-card gsap-reveal-card" style="text-align: left;">
-                    <h2 class="gsap-reveal-title"><i class="fas fa-brain fa-fw"></i>Economia Contemporânea: Adaptação</h2>
+            <section data-era="digital" class="center-content era-digital"> 
+                <div class="glass-card gsap-reveal-card" style="text-align: left; max-width:900px;"> 
+                    <h2 class="gsap-reveal-title"><i class="fas fa-brain fa-fw" aria-hidden="true"></i>Economia Contemporânea: Adaptação</h2>
                     <div class="columns-2">
                         <div>
                             <h4 class="gsap-reveal-text">Transformações Produtivas:</h4>
                             <ul class="icon-list gsap-reveal-text">
-                                <li class="gsap-reveal-item"><i class="fas fa-robot fa-fw"></i>Automação avançada.</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-concierge-bell fa-fw"></i>Crescimento do setor de serviços.</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-network-wired fa-fw"></i>Cadeias produtivas globais.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-robot fa-fw" aria-hidden="true"></i>Automação avançada.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-concierge-bell fa-fw" aria-hidden="true"></i>Crescimento do setor de serviços.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-network-wired fa-fw" aria-hidden="true"></i>Cadeias produtivas globais.</li>
                             </ul>
                         </div>
                         <div>
                             <h4 class="gsap-reveal-text" style="margin-top:20px;">Novas Demandas Profissionais:</h4>
                             <ul class="icon-list gsap-reveal-text">
-                                <li class="gsap-reveal-item"><i class="fas fa-route fa-fw"></i>Carreiras não-lineares.</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-book-reader fa-fw"></i>Aprendizado contínuo.</li>
-                                <li class="gsap-reveal-item"><i class="fas fa-people-arrows fa-fw"></i>Valorização da <strong>adaptabilidade</strong>.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-route fa-fw" aria-hidden="true"></i>Carreiras não-lineares.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-book-reader fa-fw" aria-hidden="true"></i>Aprendizado contínuo.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-people-arrows fa-fw" aria-hidden="true"></i>Valorização da <strong>adaptabilidade</strong>.</li>
                             </ul>
                         </div>
                     </div>
-                    <img src="https://placehold.co/450x180/3498db/FFFFFF?text=Adaptabilidade+e+Aprendizado" alt="Ícones de Adaptabilidade e Aprendizado" class="gsap-reveal-card" style="width:100%; max-width:400px; border-radius:var(--border-radius-main); margin: 20px auto; display:block;" onerror="this.src='https://placehold.co/450x180/cccccc/FFFFFF?text=Err'">
+                    <img src="https://placehold.co/450x180/3498db/FFFFFF?text=Adaptabilidade+e+Aprendizado" alt="Ícones de Adaptabilidade e Aprendizado" class="gsap-reveal-card" style="width:100%; max-width:400px; border-radius:var(--border-radius-main); margin: 20px auto; display:block;" onerror="this.style.display='none'; console.error('Placeholder image failed to load.');">
                 </div>
                  <div class="slide-footer">Era Digital - Adaptação</div>
             </section>
 
             <section data-era="futuro" data-transition="slide-in fade-out" class="transition-slide era-futuro">
                 <div class="text-container gsap-reveal-card">
-                    <h2 class="gsap-reveal-title">O Amanhã do Trabalho</h2>
-                    <p class="gsap-reveal-subtitle subtitle">IA, Automação e o Horizonte Tecnológico</p>
+                    <h2 class="gsap-reveal-title">O Futuro do Trabalho</h2>
+                    <p class="gsap-reveal-subtitle subtitle">IA, Automação e Novas Perspectivas</p>
                 </div>
-                 <div class="slide-footer">Próximo: O Futuro</div>
+                 <div class="slide-footer">Próximo: Horizonte Tecnológico</div>
             </section>
 
             <section data-era="futuro" class="era-futuro">
-                <div class="glass-card gsap-reveal-card"> 
-                    <h2 class="gsap-reveal-title"><i class="fas fa-microchip fa-fw"></i>Horizonte Tecnológico: IA e Automação</h2>
+                <div class="glass-card gsap-reveal-card" style="max-width:900px;">
+                    <h2 class="gsap-reveal-title"><i class="fas fa-microchip fa-fw" aria-hidden="true"></i>Horizonte Tecnológico: IA e Automação</h2>
                     <h4 class="gsap-reveal-text">Tecnologias Emergentes:</h4>
                     <div class="masonry-container" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
                         <div class="masonry-item glass-card gsap-reveal-card" style="text-align: center;">
-                             <i class="fas fa-brain fa-3x gsap-reveal-icon" style="margin-bottom:10px;"></i>
+                             <i class="fas fa-brain fa-3x gsap-reveal-icon" style="margin-bottom:10px;" aria-hidden="true"></i>
                             <h5>Inteligência Artificial Avançada</h5>
                         </div>
                         <div class="masonry-item glass-card gsap-reveal-card" style="text-align: center;">
-                            <i class="fas fa-project-diagram fa-3x gsap-reveal-icon" style="margin-bottom:10px;"></i>
+                            <i class="fas fa-project-diagram fa-3x gsap-reveal-icon" style="margin-bottom:10px;" aria-hidden="true"></i>
                             <h5>Automação de Processos</h5>
                         </div>
                         <div class="masonry-item glass-card gsap-reveal-card" style="text-align: center;">
-                            <i class="fas fa-robot fa-3x gsap-reveal-icon" style="margin-bottom:10px;"></i>
+                            <i class="fas fa-robot fa-3x gsap-reveal-icon" style="margin-bottom:10px;" aria-hidden="true"></i>
                             <h5>Robótica e Manufatura Aditiva</h5>
                         </div>
                     </div>
                     <h4 class="gsap-reveal-text" style="margin-top:20px;">Transformações Previstas:</h4>
                     <ul class="icon-list gsap-reveal-text">
-                        <li class="gsap-reveal-item"><i class="fas fa-user-slash fa-fw"></i>Obsolescência de funções, criação de novas.</li>
-                        <li class="gsap-reveal-item"><i class="fas fa-graduation-cap fa-fw"></i>Mudança no perfil de habilidades valorizadas.</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-user-slash fa-fw" aria-hidden="true"></i>Obsolescência de funções, criação de novas.</li>
+                        <li class="gsap-reveal-item"><i class="fas fa-graduation-cap fa-fw" aria-hidden="true"></i>Mudança no perfil de habilidades valorizadas.</li>
                     </ul>
                 </div>
                  <div class="slide-footer">Futuro - IA e Automação</div>
@@ -887,39 +1012,41 @@
 
             <section data-era="conclusao" data-transition="slide-in fade-out" class="transition-slide bg-modern-5">
                 <div class="text-container gsap-reveal-card">
-                    <h2 class="gsap-reveal-title light-text">Reflexões Finais</h2>
-                    <p class="gsap-reveal-subtitle subtitle light-text">Adaptando-se para a Prosperidade</p>
+                    <h2 class="gsap-reveal-title">Conclusão</h2> 
+                    <p class="gsap-reveal-subtitle subtitle">Aprendizados e o Caminho Adiante</p> 
                 </div>
-                 <div class="slide-footer">Próximo: Conclusão</div>
+                 <div class="slide-footer">Próximo: Reflexões Finais</div>
             </section>
 
-            <section data-era="conclusao" data-background-color="#f5f5f7" class="center-content">
-                <h2 class="gsap-reveal-title"><i class="fas fa-flag-checkered fa-fw"></i>Reflexões Finais: Adaptação e Prosperidade</h2>
-                <div class="columns-2">
-                    <div class="glass-card gsap-reveal-card">
-                        <h3><i class="fas fa-history fa-fw"></i>Lições Históricas</h3>
-                        <ul class="icon-list">
-                            <li class="gsap-reveal-item"><i class="fas fa-sync fa-fw"></i>Trabalho evolui com tecnologia.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-lightbulb fa-fw"></i>Adaptabilidade é constante.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-road fa-fw"></i>Sistemas que permitem inovação.</li>
-                        </ul>
+            <section data-era="conclusao" data-background-color="#f5f5f7" class="center-content"> 
+                <div style="width:100%; max-width:1100px; text-align:left;"> 
+                    <h2 class="gsap-reveal-title" style="text-align:center;"><i class="fas fa-flag-checkered fa-fw" aria-hidden="true"></i>Reflexões Finais: Adaptação e Prosperidade</h2>
+                    <div class="columns-2">
+                        <div class="glass-card gsap-reveal-card">
+                            <h3><i class="fas fa-history fa-fw" aria-hidden="true"></i>Lições Históricas</h3>
+                            <ul class="icon-list">
+                                <li class="gsap-reveal-item"><i class="fas fa-sync fa-fw" aria-hidden="true"></i>Trabalho evolui com tecnologia.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-lightbulb fa-fw" aria-hidden="true"></i>Adaptabilidade é constante.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-road fa-fw" aria-hidden="true"></i>Sistemas que permitem inovação.</li>
+                            </ul>
+                        </div>
+                        <div class="glass-card gsap-reveal-card">
+                             <h3><i class="fas fa-tasks fa-fw" aria-hidden="true"></i>Desafios Futuros</h3>
+                            <ul class="icon-list">
+                                <li class="gsap-reveal-item"><i class="fas fa-balance-scale-right fa-fw" aria-hidden="true"></i>Equilibrar inovação e estabilidade.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-users-cog fa-fw" aria-hidden="true"></i>Facilitar transições profissionais.</li>
+                                <li class="gsap-reveal-item"><i class="fas fa-vial fa-fw" aria-hidden="true"></i>Permitir experimentação.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="glass-card gsap-reveal-card">
-                         <h3><i class="fas fa-tasks fa-fw"></i>Desafios Futuros</h3>
-                        <ul class="icon-list">
-                            <li class="gsap-reveal-item"><i class="fas fa-balance-scale-right fa-fw"></i>Equilibrar inovação e estabilidade.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-users-cog fa-fw"></i>Facilitar transições profissionais.</li>
-                            <li class="gsap-reveal-item"><i class="fas fa-vial fa-fw"></i>Permitir experimentação.</li>
-                        </ul>
-                    </div>
+                    <p class="gsap-reveal-text" style="margin-top: 30px; font-size: 1.1em; text-align: center;">A prosperidade futura dependerá da nossa capacidade de abraçar a mudança, fomentando arranjos que permitam experimentação, aprendizado contínuo e mobilidade.</p>
                 </div>
-                <p class="gsap-reveal-text" style="margin-top: 30px; font-size: 1.1em; text-align: center;">A prosperidade futura dependerá da nossa capacidade de abraçar a mudança, fomentando arranjos que permitam experimentação, aprendizado contínuo e mobilidade.</p>
                  <div class="slide-footer">Conclusão</div>
             </section>
 
             <section data-era="conclusao" data-transition="zoom-in fade-out" class="center-content bg-dark-gradient">
                 <h1 class="gsap-reveal-title" style="font-size: 3.5em;">Obrigado!</h1>
-                <h2 class="gsap-reveal-subtitle" style="font-size: 1.8em; color: #bdc3c7;">Perguntas? <i class="far fa-comments"></i></h2>
+                <h2 class="gsap-reveal-subtitle" style="font-size: 1.8em; color: #bdc3c7;">Perguntas? <i class="far fa-comments" aria-hidden="true"></i></h2>
                 <p class="gsap-reveal-text" style="margin-top: 30px; font-size: 1.0em;">contato@email.com | @seusocial</p>
                  <div class="slide-footer">As Mudanças no Mundo do Trabalho</div>
             </section>
@@ -938,20 +1065,20 @@
             "inicio": "inicio",
             "primitiva": "primitiva",
             "feudal": "feudal",
-            "industrial": "industrial",
-            "seculoXX": "industrial", 
-            "posguerra": "digital", 
-            "digital": "digital",
+            "industrial": "industrial", 
+            "seculoXX": "industrial",    
+            "posguerra": "digital", // Content for posguerra starts the "Digital" timeline segment
+            "digital": "digital",      
             "futuro": "futuro",
             "conclusao": "conclusao"
         };
 
         Reveal.initialize({
             history: false, 
-            center: true, 
+            center: false, 
             width: 1280, 
             height: 720, 
-            margin: 0.04, 
+            margin: 0, // Set to 0 if sections control their own full height and padding
             minScale: 0.2, 
             maxScale: 1.5, 
             transition: 'fade', 
@@ -973,34 +1100,34 @@
           }
           gsap.to([timelineIndicator,timelineProgress],{opacity:1,duration:.3});
 
-          const eraKey=currentSlide.dataset.era;
-          const targetEra=timelineEraMap[eraKey]||eraKey;
-          const activeItem=timelineItems.find(i=>i.dataset.era===targetEra);
+          const eraKey = currentSlide.dataset.era;
+          const targetEra = timelineEraMap[eraKey] || eraKey; 
+          const activeItem = timelineItems.find(i=>i.dataset.era === targetEra);
           
           const activeItemVisualIndex = timelineItems.findIndex(i => i.dataset.era === targetEra);
 
           timelineItems.forEach(i=>i.classList.remove('active'));
 
           if(activeItem){
-            activeItem.classList.add('active');
+            activeItem.classList.add('active'); 
 
-            const tlRect=fixedTimeline.getBoundingClientRect();
-            const itemRect=activeItem.getBoundingClientRect();
-            const firstItemRect = timelineItems[0].getBoundingClientRect();
+            const tlRect = fixedTimeline.getBoundingClientRect();
+            const itemRect = activeItem.getBoundingClientRect();
+            const firstItemRect = timelineItems[0].getBoundingClientRect(); 
             
-            const dotCenter=itemRect.left - tlRect.left + (itemRect.width/2);
+            const dotCenter = itemRect.left - tlRect.left + (itemRect.width/2);
             
             let progressWidth = 0;
             if (activeItemVisualIndex >= 0) { 
-                if (activeItemVisualIndex === 0) {
+                if (activeItemVisualIndex === 0) { 
                     progressWidth = itemRect.width / 2; 
-                } else {
+                } else { 
                     progressWidth = (itemRect.left - firstItemRect.left) + (itemRect.width / 2);
                 }
             }
 
             gsap.to(timelineIndicator,{
-              left:dotCenter,
+              left: dotCenter,
               duration: 0.7, 
               ease: 'sine.inOut' 
             });
@@ -1017,9 +1144,10 @@
         
         function animateSlideElements(slide) {
             if (!slide || typeof slide.querySelector !== 'function') {
-                return;
+                return; 
             }
             const tl = gsap.timeline({defaults: { duration: 0.75, ease: 'power2.out' }}); 
+            
             const title = slide.querySelector('.gsap-reveal-title');
             const subtitle = slide.querySelector('.gsap-reveal-subtitle');
             const texts = slide.querySelectorAll('.gsap-reveal-text');
@@ -1028,7 +1156,7 @@
             const items = slide.querySelectorAll('.gsap-reveal-item'); 
 
             if (title) tl.fromTo(title, { opacity: 0, y: 50 }, { opacity: 1, y: 0 });
-            if (subtitle) tl.fromTo(subtitle, { opacity: 0, y: 40 }, { opacity: 1, y: 0 }, "-=0.55");
+            if (subtitle) tl.fromTo(subtitle, { opacity: 0, y: 40 }, { opacity: 1, y: 0 }, "-=0.55"); 
             if (texts.length > 0) tl.fromTo(texts, { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: 0.18 }, "-=0.45");
             if (cards.length > 0) tl.fromTo(cards, { opacity: 0, scale: 0.93, y: 25 }, { opacity: 1, scale: 1, y: 0, stagger: 0.22 }, "-=0.45");
             if (icons.length > 0) tl.fromTo(icons, { opacity: 0, scale: 0.65, rotate: -20 }, { opacity: 1, scale: 1, rotate: 0, stagger: 0.12, ease: 'back.out(1.6)' }, "-=0.55");
@@ -1063,10 +1191,12 @@
                 const targetEra = item.dataset.era;
                 const slides = Reveal.getSlides();
                 for (let i = 0; i < slides.length; i++) {
+                    if (slides[i].style.display === 'none' && slides[i].classList.contains('commented-out')) continue;
+
                     const slideEraKey = slides[i].dataset.era;
                     const mappedTimelineEra = timelineEraMap[slideEraKey] || slideEraKey;
                     if (mappedTimelineEra === targetEra) {
-                        Reveal.slide(i);
+                        Reveal.slide(i); 
                         break;
                     }
                 }
